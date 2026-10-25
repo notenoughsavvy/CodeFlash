@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeFlash | Learn to Code</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    .hidden { display: none !important; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid #93c5fd; outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- VIEW 1: LOGIN / SIGN UP -->
+  <section id="login-view" class="min-h-screen flex items-center justify-center p-4 bg-blue-50">
+    <form id="auth-form" class="w-full max-w-sm rounded-3xl bg-white p-8 shadow-lg space-y-4">
+      <div class="text-center">
+        <div class="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-blue-600 text-2xl text-white">⌘</div>
+        <h1 id="form-title" class="text-2xl font-bold">Welcome to CodeFlash</h1>
+        <p class="mt-1 text-sm text-slate-500">Learn web development one card at a time.</p>
+      </div>
+      <p id="auth-error" class="hidden rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert"></p>
+      <label class="block text-sm font-medium" for="username-input">Username</label>
+      <input id="username-input" autocomplete="username" required minlength="2" class="w-full rounded-xl border border-slate-300 p-3" placeholder="Choose a username" />
+      <label class="block text-sm font-medium" for="password-input">Password</label>
+      <input id="password-input" type="password" autocomplete="current-password" required minlength="4" class="w-full rounded-xl border border-slate-300 p-3" placeholder="At least 4 characters" />
+      <button id="auth-btn" type="submit" class="w-full rounded-xl bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700">Login</button>
+      <p class="text-center text-sm text-slate-600">
+        <span id="toggle-text">Don't have an account?</span>
+        <button id="toggle-mode-btn" type="button" class="font-semibold text-blue-600 hover:underline">Sign Up</button>
+      </p>
+      <p class="text-xs text-slate-400">Demo only: accounts are stored in this browser, not securely on a server.</p>
+    </form>
+  </section>
+
+  <!-- VIEW 2: DASHBOARD -->
+  <section id="dashboard-view" class="hidden min-h-screen p-4 sm:p-8">
+    <header class="mx-auto flex max-w-5xl items-center justify-between gap-4">
+      <div><p class="text-sm font-semibold uppercase tracking-widest text-blue-600">CodeFlash</p><h1 class="text-2xl font-bold">Your learning space</h1></div>
+      <button id="logout-btn" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-100">Log out</button>
+    </header>
+    <main class="mx-auto mt-8 max-w-5xl">
+      <div class="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-600 p-6 text-white sm:p-10">
+        <p class="text-sm text-blue-100">WELCOME BACK</p>
+        <h2 id="welcome-msg" class="mt-2 text-3xl font-bold">Welcome!</h2>
+        <p class="mt-3 max-w-xl text-blue-100">Build your coding knowledge with quick, focused flashcard sessions.</p>
+        <button id="start-learning-btn" class="mt-6 rounded-xl bg-white px-5 py-3 font-bold text-blue-700 hover:bg-blue-50">Start learning →</button>
+      </div>
+      <div class="mt-6 grid gap-4 sm:grid-cols-3">
+        <article class="rounded-2xl border border-slate-200 bg-white p-5"><p class="text-sm text-slate-500">Topics</p><p class="mt-2 text-2xl font-bold">3</p><p class="text-sm text-slate-500">HTML, CSS, JavaScript</p></article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-5"><p class="text-sm text-slate-500">Questions available</p><p id="stat-total" class="mt-2 text-2xl font-bold">0</p><p class="text-sm text-slate-500">Across all topics</p></article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-5"><p class="text-sm text-slate-500">Current session</p><p class="mt-2 text-2xl font-bold">Your pace</p><p class="text-sm text-slate-500">Choose how many cards to study</p></article>
+      </div>
+    </main>
+  </section>
+
+  <!-- VIEW 3: CATEGORY + QUESTION COUNT -->
+  <section id="category-view" class="hidden min-h-screen p-4 sm:p-8">
+    <main class="mx-auto max-w-3xl">
+      <div class="flex items-center justify-between gap-3">
+        <div><p class="text-sm font-semibold uppercase tracking-widest text-blue-600">Make a session</p><h1 class="text-3xl font-bold">Choose a category</h1></div>
+        <button id="back-to-dash-btn" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold">Dashboard</button>
+      </div>
+      <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-5">
+        <label for="question-count-select" class="mb-2 block font-semibold">Number of questions</label>
+        <select id="question-count-select" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3">
+          <option value="5">5 questions — Quick review</option>
+          <option value="10" selected>10 questions — Standard</option>
+          <option value="20">20 questions — Deep dive</option>
+          <option value="all">All available questions</option>
+        </select>
+        <p class="mt-2 text-sm text-slate-500">If a category has fewer questions than selected, all available questions will be used.</p>
+      </div>
+      <div class="mt-5 grid gap-4 sm:grid-cols-3">
+        <button data-category="html" class="category-btn rounded-2xl border border-orange-200 bg-orange-50 p-5 text-left hover:border-orange-400 hover:bg-orange-100"><span class="text-2xl">📄</span><span class="mt-3 block font-bold text-orange-900">HTML</span><span id="html-count" class="mt-1 block text-sm text-orange-800">Questions</span></button>
+        <button data-category="css" class="category-btn rounded-2xl border border-blue-200 bg-blue-50 p-5 text-left hover:border-blue-400 hover:bg-blue-100"><span class="text-2xl">🎨</span><span class="mt-3 block font-bold text-blue-900">CSS</span><span id="css-count" class="mt-1 block text-sm text-blue-800">Questions</span></button>
+        <button data-category="js" class="category-btn rounded-2xl border border-yellow-200 bg-yellow-50 p-5 text-left hover:border-yellow-400 hover:bg-yellow-100"><span class="text-2xl">⚡</span><span class="mt-3 block font-bold text-yellow-900">JavaScript</span><span id="js-count" class="mt-1 block text-sm text-yellow-800">Questions</span></button>
+      </div>
+      <p id="category-error" class="hidden mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700"></p>
+    </main>
+  </section>
+
+  <!-- VIEW 4: FLASHCARDS -->
+  <section id="flashcard-view" class="hidden min-h-screen p-4 sm:p-8">
+    <main class="mx-auto max-w-2xl">
+      <header class="flex items-center justify-between gap-3">
+        <div><p class="text-sm font-semibold uppercase tracking-widest text-blue-600">Study session</p><h1 id="session-title" class="text-2xl font-bold">HTML flashcards</h1></div>
+        <button id="change-category-btn" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold">Change session</button>
+      </header>
+      <div class="mt-6">
+        <div class="mb-2 flex justify-between text-sm text-slate-500"><span id="card-number">Question 1 of 5</span><span id="progress-percent">20%</span></div>
+        <div class="h-2 overflow-hidden rounded-full bg-slate-200"><div id="progress-bar" class="h-full rounded-full bg-blue-600 transition-all" style="width:20%"></div></div>
+      </div>
+      <button id="flashcard" type="button" aria-label="Flashcard. Click reveal answer." class="mt-5 flex min-h-72 w-full flex-col justify-center rounded-3xl border border-slate-200 bg-white p-8 text-left shadow-lg transition hover:shadow-xl sm:min-h-80">
+        <span id="card-side-label" class="text-xs font-bold uppercase tracking-widest text-blue-600">QUESTION · CLICK TO REVEAL</span>
+        <span id="textcontent" class="mt-5 text-2xl font-semibold leading-relaxed">What does HTML stand for?</span>
+        <span class="mt-8 text-sm text-slate-400">Click this card or press Space to reveal the answer</span>
+      </button>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <button id="prev-btn" class="rounded-xl border border-slate-300 bg-white px-4 py-3 font-semibold hover:bg-slate-100">← Previous</button>
+        <button id="reveal-btn" class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 font-semibold text-blue-700 hover:bg-blue-100">Reveal answer</button>
+        <button id="next-btn" class="col-span-2 rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-700">Next question →</button>
+      </div>
+      <button id="finish-btn" class="mt-4 w-full rounded-xl py-2 text-sm font-medium text-slate-500 hover:text-slate-800">Finish session and return to dashboard</button>
+      <p class="mt-3 text-center text-xs text-slate-400">Keyboard: Space = reveal · ← = previous · → = next</p>
+    </main>
+  </section>
+
+  <!-- VIEW 5: SESSION COMPLETE -->
+  <section id="complete-view" class="hidden min-h-screen items-center justify-center p-4">
+    <main class="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg">
+      <div class="text-5xl">🎉</div><h1 class="mt-4 text-3xl font-bold">Session complete!</h1>
+      <p id="complete-message" class="mt-3 text-slate-600">You reviewed your cards.</p>
+      <button id="study-again-btn" class="mt-6 w-full rounded-xl bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700">Study another topic</button>
+      <button id="complete-dashboard-btn" class="mt-3 w-full rounded-xl border border-slate-300 p-3 font-semibold hover:bg-slate-50">Back to dashboard</button>
+    </main>
+  </section>
+
+  <script src="index.js"></script>
+</body>
+</html>
